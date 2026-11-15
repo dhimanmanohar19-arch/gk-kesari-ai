@@ -43,11 +43,8 @@ chatForm.addEventListener("submit", async (event) => {
 
     const data = await response.json();
 
-    waiting.textContent =
-      data.reply || data.error || "कोई जवाब नहीं मिला।";
-
-  } catch (error) {
-    waiting.textContent =
+  
+ waiting.textContent = data.reply || data.error || "कोई जवाब नहीं मिला"; 
       "सर्वर से संपर्क नहीं हो पाया। इंटरनेट और सर्वर जाँचें।";
   } finally {
     sendButton.disabled = false;
