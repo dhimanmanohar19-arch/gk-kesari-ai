@@ -1,6 +1,4 @@
-JavaScript
 
-const chatForm = document.getElementById("chatForm");
 const chatInput = document.getElementById("chatInput");
 const chatMessages = document.getElementById("chatMessages");
 const sendButton = document.getElementById("sendButton");
@@ -16,42 +14,7 @@ function addMessage(text, role) {
 
 // AI CHAT SYSTEM
 chatForm.addEventListener("submit", async (event) => {
-  event.preventDefault();
-
-  const message = chatInput.value.trim();
-  if (!message) return;
-
-  addMessage(message, "user");
-  chatInput.value = "";
-
-  sendButton.disabled = true;
-  sendButton.textContent = "रुकें...";
-
-  const waiting = addMessage(
-    "जवाब तैयार हो रहा है...",
-    "assistant"
-  );
-
-  try {
-    const response = await fetch("/api/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ message })
-    });
-
-    const data = await response.json();
-
-  
- waiting.textContent = data.reply || data.error || "कोई जवाब नहीं मिला"; 
-      "सर्वर से संपर्क नहीं हो पाया। इंटरनेट और सर्वर जाँचें।";
-  } finally {
-    sendButton.disabled = false;
-    sendButton.textContent = "भेजें ➤";
-    chatInput.focus();
-  }
-});
+  event.preventDefault
 
 // GK QUIZ QUESTIONS
 const questions = [
