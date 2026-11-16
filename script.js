@@ -1,43 +1,64 @@
 
 const chatInput = document.getElementById("chatInput");
-const chatMessages = document.getElementById("chatMessages");
-const sendButton = document.getElementById("sendButton");
+const // फॉर्म सबमिट या चैट भेजने का मुख्य लॉजिक
+const chatForm = document.getElementById("chat-form"); // अपने फॉर्म या बटन की आईडी यहाँ चेक कर लें
+const chatInput = document.getElementById("chat-input");
+const sendButton = document.getElementById("send-button");
+const waiting = document.getElementById("waiting"); // लोडिंग या वेटिंग मैसेज दिखाने वाला एलिमेंट
 
-function addMessage(text, role) {
-  const item = document.createElement("div");
-  item.className = `message ${role}`;
-  item.textContent = text;
-  chatMessages.appendChild(item);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-  return item;
+if (chatForm) {
+    chatForm.addEventListener("submit", async (event) => {
+        // फॉल्ट यहाँ था: event.preventDefault() में कोष्ठक छूटे थे
+        event.preventDefault();
+
+        const message = chatInput.value.trim();
+        if (!message) return;
+
+        // UI को अपडेट करें (बटन बंद करें, लोडिंग दिखाएं)
+        sendButton.disabled = true;
+        sendButton.textContent = "भेजा जा रहा है...";
+        
+        if (waiting) {
+            waiting.textContent = "जवाब आ रहा है...";
+        }
+
+        try {
+            const response = await fetch("/api/chat", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ message })
+            });
+
+            const data = await response.json();
+
+            if (waiting) {
+                waiting.textContent = data.reply || data.error || "कोई जवाब नहीं मिला।";
+            }
+
+        } catch (error) {
+            if (waiting) {
+                waiting.textContent = "सर्वर से संपर्क नहीं हो पाया। इंटरनेट और सर्वर जाँचें।";
+            }
+        } finally {
+            sendButton.disabled = false;
+            sendButton.textContent = "भेजें ➔";
+            chatInput.focus();
+        }
+    });
 }
 
-// AI CHAT SYSTEM
-chatForm.addEventListener("submit", async (event) => {
-  event.preventDefault
 
-// GK QUIZ QUESTIONS
+// // GK QUIZ QUESTIONS (अगर आप क्विज़ का डेटा भी साथ रख रहे हैं)
 const questions = [
-  {
-    q: "भारत की राजधानी क्या है?",
-    o: ["मुंबई", "नई दिल्ली", "जयपुर", "लखनऊ"],
-    a: 1,
-    e: "भारत की राजधानी नई दिल्ली है।"
-  },
-  {
-    q: "भारत का राष्ट्रीय पशु कौन है?",
-    o: ["शेर", "हाथी", "बाघ", "घोड़ा"],
-    a: 2,
-    e: "भारत का राष्ट्रीय पशु बाघ है।"
-  },
-  {
-    q: "सौरमंडल का सबसे बड़ा ग्रह कौन-सा है?",
-    o: ["पृथ्वी", "मंगल", "शनि", "बृहस्पति"],
-    a: 3,
-    e: "बृहस्पति सबसे बड़ा ग्रह है।"
-  },
-  {
-    q: "भारत का संविधान कब लागू हुआ?",
+    {
+        q: "भारत की राजधानी क्या है?",
+        o: ["मुंबई", "नई दिल्ली", "जयपुर", "लखनऊ"],
+        a: 1,
+        e: "भारत की राजधानी नई दिल्ली है।"
+    }
+];लागू हुआ?",
     o: [
       "15 अगस्त 1947",
       "26 जनवरी 1950",
