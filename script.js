@@ -192,7 +192,89 @@ restartButton.addEventListener("click", () => {
   score = 0;
   renderQuestion();
 });
+// --- GK Kesari Complete Voice & Audio Engine (Mic + Speaker) ---
 
+// 1. AI के असली जवाब को बोलकर सुनाना (Dynamic Text-to-Speech)
+function speakCurrentResponse() {
+    // यहाँ अपनी उस HTML ID को लिखें जहाँ AI का जवाब (Output) दिखता है (जैसे id="output" या id="response-box")
+    const outputElement = document.getElementById('output') || document.getElementById('response-box') || document.getElementById('question-box');
+    
+    let textToRead = "";
+    if (outputElement && outputElement.innerText.trim() !== "") {
+        textToRead = outputElement.innerText; // यह स्क्रीन पर लिखा हुआ असली जवाब पढ़ेगा!
+    } else {
+        textToRead = "कृपया पहले कोई सवाल पूछें या लिखें।";
+    }
+
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel(); // पुरानी आवाज़ रोकें
+        const utterance = new SpeechSynthesisUtterance(textToRead);
+        utterance.lang = 'hi-IN'; // हिंदी
+        utterance.rate = 1.0;
+        window.speechSynthesis.speak(utterance);
+    }
+}
+
+// 2. बोलकर सर्च करने के लिए माइक्रोफोन चालू करना (Speech-to-Text / Listening)
+function startListening() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    
+    if (!SpeechRecognition) {
+        alert("आपका ब्राउज़र वॉइस रिकॉर्डिंग (Mic) सपोर्ट नहीं करता। कृपया क्रोम ब्राउज़र इस्तेमाल करें।");
+        return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'hi-IN'; // हिंदी में बोलकर सर्च करें
+    recognition.interimResults = false;
+
+    recognition.onstart = function() {
+        console.log("Mic चालू हो गया है, बोलिए...");
+        // चाहें तो यहाँ बटन का रंग बदल सकते हैं या हिंट दिखा सकते हैं
+    };
+
+    recognition.onresult = function(event) {
+        const spokenText = event.results[0][0].transcript;
+        console.log("सुना गया सवाल:", spokenText);
+        
+        // इनपुट बॉक्स में बोली गई बात को ऑटोमैटिक भर दें
+        // (अपने इनपुट बॉक्स की ID यहाँ चेक कर लें जैसे id="user-input" या id="query")
+        const inputField = document.getElementById('user-input') || document.getElementById('query');
+        if (inputField) {
+            inputField.value = spokenText;
+            
+            // अगर आपके पास कोई सर्च या सबमिट फंक्शन है, तो उसे यहाँ ऑटो-ट्रिगर कर सकते हैं
+            // जैसे: submitQuery(); या searchGK();
+        }
+    };
+
+    recognition.onerror = function(event) {
+        console.error("Mic error:", event.error);
+    };
+
+    recognition.start();
+}
+
+// 3. लाल बटन पर क्लिक करने का मुख्य कंट्रोल
+document.addEventListener('DOMContentLoaded', () => {
+    const redButton = document.getElementById('red-speaker-btn'); // अपनी लाल बटन की ID
+    
+    if (redButton) {
+        redButton.addEventListener('click', () => {
+            // लॉजिक: अगर इनपुट बॉक्स खाली है, तो माइक सुनेगा (Speech-to-Text)।
+            // अगर जवाब आ चुका है, तो लाल बटन उसे पढ़कर सुनाएगा (Text-to-Speech)।
+            const inputField = document.getElementById('user-input') || document.getElementById('query');
+            
+            if (inputField && inputField.value.trim() === "") {
+                // अगर कुछ नहीं लिखा, तो बोलकर पूछने के लिए माइक ऑन करें
+                startListening();
+            } else {
+                // अगर जवाब या सवाल है, तो उसे स्पीकर से बोलें
+                speakCurrentResponse();
+            }
+        });
+    }
+});
 // START QUIZ
 renderQuestion();
 
