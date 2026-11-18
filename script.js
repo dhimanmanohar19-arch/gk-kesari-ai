@@ -18,4 +18,41 @@ const questions = [
     options: ["तोता", "मोर", "कबूतर", "हंस"],
     answer: "मोर"
   }
-];
+];JavaScript
+function showQuestion() {
+  if (currentQuestion >= questions.length) {
+    document.getElementById("question").innerText =
+      "🎉 सभी सवाल पूरे हो गए!";
+
+    document.getElementById("options").innerHTML = "";
+    return;
+  }
+
+  let q = questions[currentQuestion];
+
+  document.getElementById("question").innerText = q.question;
+
+  let box = document.getElementById("options");
+  box.innerHTML = "";
+
+  q.options.forEach(option => {
+    let btn = document.createElement("button");
+    btn.innerText = option;
+
+    btn.onclick = function() {
+      if (option === q.answer) {
+        score++;
+        alert("सही जवाब!");
+      } else {
+        alert("गलत जवाब! सही उत्तर: " + q.answer);
+      }
+
+      currentQuestion++;
+      showQuestion();
+    };
+
+    box.appendChild(btn);
+  });
+}
+
+showQuestion();
