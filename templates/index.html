@@ -284,11 +284,7 @@ document.getElementById("answer").innerText =
 document.querySelectorAll(".option")[correct]
 .classList.add("correct");
 }
-
-JavaScript
-
-function nextQuestion() {
-  if (current >= questions.length - 1) {
+{
     document.getElementById("questionText").innerText = "सभी सवाल पूरे हो गए!";
     document.getElementById("options").innerHTML = "";
     document.getElementById("answer").innerText =
@@ -299,6 +295,8 @@ function nextQuestion() {
   current++;
   loadQuestion();
 }
+
+
 
 </script>
 
