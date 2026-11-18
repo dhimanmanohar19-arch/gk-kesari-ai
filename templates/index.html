@@ -285,10 +285,21 @@ document.querySelectorAll(".option")[correct]
 .classList.add("correct");
 }
 
+JavaScript
+
 function nextQuestion() {
-current = (current + 1) % questions.length;
-loadQuestion();
+  if (current >= questions.length - 1) {
+    document.getElementById("questionText").innerText = "सभी सवाल पूरे हो गए!";
+    document.getElementById("options").innerHTML = "";
+    document.getElementById("answer").innerText =
+      "शानदार! आपने सभी सवाल हल कर लिए।";
+    return;
+  }
+
+  current++;
+  loadQuestion();
 }
+
 </script>
 
 
