@@ -1,5 +1,5 @@
 tat
-const chatInput = document.getElementById("chatInput");
+
 const // फॉर्म सबमिट या चैट भेजने का मुख्य लॉजिक
 const chatForm = document.getElementById("chat-form"); // अपने फॉर्म या बटन की आईडी यहाँ चेक कर लें
 const chatInput = document.getElementById("chat-input");
