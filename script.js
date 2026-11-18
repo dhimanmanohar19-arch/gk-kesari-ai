@@ -53,6 +53,15 @@ function showQuestion() {
 
     box.appendChild(btn);
   });
+}JavaScript
+function restartQuiz() {
+  currentQuestion = 0;
+  score = 0;
+  showQuestion();
 }
 
-showQuestion();
+function getQuizScore() {
+  alert("आपका कुल स्कोर: " + score);
+}
+
+console.log("GK Kesari AI Quiz Ready!");
