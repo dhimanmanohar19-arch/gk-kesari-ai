@@ -125,5 +125,170 @@ onclick="startVoice()">🎤</button>
 <div id="response">नमस्कार! GK Kesari AI में आपका स्वागत है।</div>
 </div>
 </main>
+HTML
+
+<style>
+.section {
+margin-top: 22px;
+padding: 20px;
+background: #101a36;
+border: 1px solid #263d70;
+border-radius: 18px;
+}
+h2 {
+font-size: 20px;
+color: #42eaff;
+margin-bottom: 15px;
+}
+.input-row {
+display: flex;
+gap: 8px;
+}
+input {
+width: 100%;
+padding: 14px;
+border: 1px solid #2876b7;
+border-radius: 12px;
+background: #071126;
+color: white;
+font-size: 16px;
+}
+.ask-btn, .next-btn {
+padding: 13px 18px;
+background: linear-gradient(135deg,#00a8e8,#2452cf);
+border: none;
+color: white;
+border-radius: 12px;
+font-weight: bold;
+}
+.option {
+width: 100%;
+padding: 15px;
+margin: 7px 0;
+border: 1px solid #31568d;
+background: #14254a;
+color: white;
+text-align: left;
+border-radius: 12px;
+font-size: 16px;
+}
+.option.correct {
+background: #075e3d;
+}
+.option.wrong {
+background: #782b37;
+}
+#answer {
+margin-top: 12px;
+color: #4cff9b;
+font-weight: bold;
+}
+.next-btn {
+width: 100%;
+margin-top: 15px;
+font-size: 16px;
+}
+footer {
+text-align: center;
+padding: 25px 10px;
+color: #8ea4cc;
+}
+</style>
+
+<div class="section">
+<h2>📚 GK PRACTICE</h2>
+<div id="questionText">
+भारत की राजधानी क्या है?
+</div>
+<div id="options"></div>
+<div id="answer"></div>
+<button class="next-btn" onclick="nextQuestion()">
+अगला सवाल ➜
+</button>
+</div>
+
+<div class="section">
+<h2>✨ AI FEATURES</h2>
+<p style="line-height:2;color:#d3e3ff">
+✓ हिंदी सवाल-जवाब<br>
+✓ सामान्य ज्ञान प्रैक्टिस<br>
+✓ आवाज सुनने की सुविधा<br>
+✓ वॉइस इनपुट<br>
+✓ चार विकल्पों वाला क्विज
+</p>
+</div>
+
+<footer>
+GK KESARI AI • M LAL<br>
+SMART KNOWLEDGE PLATFORM
+</footer>
+
+<script>
+const questions = [
+{
+q:"भारत की राजधानी क्या है?",
+o:["मुंबई","नई दिल्ली","जयपुर","लखनऊ"],
+a:1
+},
+{
+q:"भारत का राष्ट्रीय पशु कौन है?",
+o:["शेर","हाथी","बाघ","घोड़ा"],
+a:2
+},
+{
+q:"भारत का संविधान कब लागू हुआ?",
+o:["15 अगस्त 1947","26 जनवरी 1950","2 अक्टूबर 1950","26 नवंबर 1949"],
+a:1
+},
+{
+q:"भारत के प्रथम राष्ट्रपति कौन थे?",
+o:["डॉ. राजेंद्र प्रसाद","महात्मा गांधी","जवाहरलाल नेहरू","सरदार पटेल"],
+a:0
+},
+{
+q:"सूर्य किस दिशा से निकलता है?",
+o:["पश्चिम","उत्तर","दक्षिण","पूर्व"],
+a:3
+}
+];
+
+let current = 0;
+let answered = false;
+
+function loadQuestion() {
+answered = false;
+let q = questions[current];
+document.getElementById("questionText").innerText = q.q;
+document.getElementById("answer").innerText = "";
+let html = "";
+q.o.forEach((option,index) => {
+html += `<button class="option" onclick="checkAnswer(${index},this)">
+${String.fromCharCode(65+index)}. ${option}</button>`;
+});
+document.getElementById("options").innerHTML = html;
+}
+
+function checkAnswer(index,button) {
+if(answered) return;
+answered = true;
+let correct = questions[current].a;
+if(index === correct) {
+button.classList.add("correct");
+document.getElementById("answer").innerText =
+"✓ बिल्कुल सही जवाब! शाबाश!";
+} else {
+button.classList.add("wrong");
+document.getElementById("answer").innerText =
+"सही जवाब: " + questions[current].o[correct];
+}
+document.querySelectorAll(".option")[correct]
+.classList.add("correct");
+}
+
+function nextQuestion() {
+current = (current + 1) % questions.length;
+loadQuestion();
+}
+</script>
 
 
