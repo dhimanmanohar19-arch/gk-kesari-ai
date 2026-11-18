@@ -165,13 +165,40 @@ function checkAnswer(index, selectedButton) {
 }
 
 function nextQuestion() {
-  if (current >= questionOrder.length) {
-    current = 0;
-    score = 0;
-    shuffleQuestions();
+  JavaScript
+
+function nextQuestion() {
+
+    if (!answered) {
+        if (feedback) {
+            feedback.textContent = "पहले एक जवाब चुनिए!";
+        }
+        return;
+    }
+
+    current++;
+
+    if (current >= questionOrder.length) {
+
+        if (feedback) {
+            feedback.textContent =
+                "🎉 GK Kesari क्विज़ पूरा हुआ! आपका स्कोर: "
+                + score + "/" + questionOrder.length;
+        }
+
+        if (nextButton) {
+            nextButton.disabled = true;
+            nextButton.textContent = "क्विज़ पूरा हुआ";
+        }
+
+        return;
+    }
+
     showQuestion();
+}
+
     return;
-  }
+  } tc
 
   if (!answered) {
     if (feedback) {
