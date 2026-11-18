@@ -62,5 +62,68 @@ padding: 18px;
 <div class="status">● DASHBOARD READY</div>
 </header>
 <main>
+HTML
+
+<div class="robot-box">
+<style>
+.robot-box {
+text-align: center;
+padding: 25px 10px;
+margin-top: 10px;
+background: linear-gradient(145deg,#111d43,#091126);
+border: 1px solid #1766b7;
+border-radius: 25px;
+box-shadow: 0 0 25px #0755a544;
+}
+.robot {
+font-size: 100px;
+animation: glow 2s infinite alternate;
+}
+@keyframes glow {
+from {filter:drop-shadow(0 0 5px #00bfff);}
+to {filter:drop-shadow(0 0 25px #00eaff);}
+}
+.robot-title {
+font-size: 23px;
+color: #42eaff;
+margin: 10px;
+}
+.robot-text {
+color: #bdcce9;
+font-size: 14px;
+}
+.speaker {
+width: 95px;
+height: 95px;
+border-radius: 50%;
+border: 3px solid #46eaff;
+background: linear-gradient(135deg,#0879c9,#12265c);
+color: white;
+font-size: 38px;
+margin: 22px auto 8px;
+display: block;
+cursor: pointer;
+}
+</style>
+
+<div class="robot">🤖</div>
+<div class="robot-title">AI KESARI ROBOT</div>
+<div class="robot-text">आपका अपना स्मार्ट ज्ञान सहायक</div>
+
+<button class="speaker" onclick="speakWelcome()">🔊</button>
+<div class="robot-text">स्पीकर दबाकर आवाज सुनें</div>
+</div>
+
+<div class="section">
+<h2>🎙️ AI से सवाल पूछें</h2>
+<div class="input-row">
+<input id="question" placeholder="अपना सवाल लिखें...">
+<button class="ask-btn" onclick="askQuestion()">पूछें</button>
+</div>
+<button class="speaker" style="width:60px;height:60px;font-size:25px"
+onclick="startVoice()">🎤</button>
+<div id="response">नमस्कार! GK Kesari AI में आपका स्वागत है।</div>
+</div>
+</main>
 
 
