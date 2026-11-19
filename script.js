@@ -1,4 +1,4 @@
-JavaScript
+
 
 /* =====================================
    GK KESARI AI - QUIZ SYSTEM
