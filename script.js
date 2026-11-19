@@ -147,4 +147,41 @@ function showQuestion() {
 
   const fullSpeechText = questionBox.textContent + "। " + speechOptionsText;
   speakText(fullSpeechText, "hi-IN");
+}// Text-to-Speech helper function
+function speakText(text, lang = "en-IN") {
+  if (!("speechSynthesis" in window) || !text) return;
+
+  // Pichli awaaz band karein taaki overlap na ho
+  window.speechSynthesis.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = lang; // English ke liye "en-IN", Hindi ke liye "hi-IN"
+  utterance.rate = 0.95; // Bachchon aur students ke liye thoda clear speed
+  utterance.pitch = 1;
+
+  // Agar phone mein matching voice available ho to select karein
+  const voices = window.speechSynthesis.getVoices();
+  const matchedVoice = voices.find((v) => v.lang.toLowerCase().startsWith(lang.slice(0, 2).toLowerCase()));
+  if (matchedVoice) {
+    utterance.voice = matchedVoice;
+  }
+
+  window.speechSynthesis.speak(utterance);
+}
+
+// 1. Jab naya question screen par dikhe tab apne aap bolne ke liye
+function onQuestionLoaded(questionText, options = []) {
+  const optionsText = options.length ? ` Options are: ${options.join(", ")}.` : "";
+  speakText(`${questionText}${optionsText}`, "en-IN");
+}
+
+// 2. Jab user answer chune ("Perfect answer!" ya galat jawab) tab bolne ke liye
+function onAnswerResult(isCorrect, feedbackText = "") {
+  const message = feedbackText || (isCorrect ? "Perfect answer!" : "Try again.");
+  speakText(message, "en-IN");
+}
+
+// 3. Speaker button dabane par dobara bolne ke liye
+function onSpeakerButtonClick(currentQuestionText, currentOptions = []) {
+  onQuestionLoaded(currentQuestionText, currentOptions);
 }
