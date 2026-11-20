@@ -162,10 +162,13 @@ function nextQuestion(){
  loadQuestion();
 }
 
-function speakQuestion(){
- let text=questions[current].q;
- let speech=new SpeechSynthesisUtterance(text);
- speech.lang="hi-IN";
+function speakQuestion() {
+  window.speechSynthesis.cancel();
+  let text = questions[current].q;
+  let speech = new SpeechSynthesisUtterance(text);
+  speech.lang = "hi-IN";
+  window.speechSynthesis.speak(speech);
+}
  speech.rate=0.9;
  speechSynthesis.cancel();
  speechSynthesis.speak(speech);
