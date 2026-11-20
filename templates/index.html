@@ -283,18 +283,20 @@ document.getElementById("answer").innerText =
 }
 document.querySelectorAll(".option")[correct]
 .classList.add("correct");
-}
-{
+function nextQuestion() {
+  if (current + 1 >= questions.length) {
     document.getElementById("questionText").innerText = "सभी सवाल पूरे हो गए!";
     document.getElementById("options").innerHTML = "";
-    document.getElementById("answer").innerText =
-      "शानदार! आपने सभी सवाल हल कर लिए।";
+    document.getElementById("answer").innerText = "शानदार! आपने सभी सवाल हल कर लिए।";
     return;
   }
 
   current++;
   loadQuestion();
 }
+
+  current++;
+  loadQ
     </script>
 
 
