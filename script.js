@@ -24,7 +24,10 @@ function stopSpeech() {
 
 // वर्तमान सवाल और सभी विकल्पों का पूरा टेक्स्ट तैयार करने का हेल्पर
 function getCurrentQuestionSpeechText() {
-  const currentQuestionText = questionBox ? questionBox.textContent || "" : "";
+  speakText(
+  "गलत जवाब। सही उत्तर विकल्प " + correctLetter + ", " + correctOptionText,
+  "hi-IN"
+);
   const optionTexts = Array.from(document.querySelectorAll(".quiz-option"))
     .map((btn) => btn.textContent)
     .join("। ");
@@ -51,7 +54,10 @@ let resultBox = document.getElementById("quiz-result");
 if (!resultBox) {
   resultBox = document.createElement("div");
   resultBox.id = "quiz-result";
-  resultBox.style.cssText =
+  speakText(
+  "गलत जवाब। सही उत्तर विकल्प " + correctLetter + ", " + correctOptionText,
+  "hi-IN"
+);
     "display:none;margin-top:20px;padding:15px;border-radius:12px;text-align:center;";
   nextButton.insertAdjacentElement("afterend", resultBox);
 }
