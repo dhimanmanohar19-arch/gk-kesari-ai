@@ -38,11 +38,10 @@ function speakAnswerFeedback(isCorrect, correctLetter, correctOptionText) {
 
   if (isCorrect) {
     speakText("शाबाश! सही जवाब है।", "hi-IN");
-  } else {
-    speakText(
-      "गलत जवाब। सही उत्तर विकल्प " + correctLetter + ", " + correctOptionText + " है।",
-      "hi-IN"
-    );
+  } else{
+    );speakText(
+  "गलत जवाब। सही उत्तर विकल्प " + correctLetter + ", " + correctOptionText
+  "hi-IN"
   }
 }
 
