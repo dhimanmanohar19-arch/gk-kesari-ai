@@ -1,1 +1,153 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>केसरी पोर्टल - मुख्य डैशबोर्ड</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f4f6f9;
+            color: #222;
+            padding: 16px;
+        }
+        header {
+            background: linear-gradient(135deg, #ff7b00, #e65100);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        header h1 {
+            font-size: 1.6rem;
+            margin-bottom: 6px;
+        }
+        header p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+        .voice-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .voice-bar input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        .btn-voice {
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            padding: 0 18px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+        .btn-voice:active {
+            background-color: #0d47a1;
+        }
+        .grid-menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .card {
+            background: white;
+            padding: 20px 15px;
+            border-radius: 12px;
+            text-align: center;
+            text-decoration: none;
+            color: #333;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            border-bottom: 4px solid #ff7b00;
+            transition: transform 0.2s;
+        }
+        .card:active {
+            transform: scale(0.97);
+        }
+        .card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 6px;
+            color: #e65100;
+        }
+        .card p {
+            font-size: 0.85rem;
+            color: #666;
+        }
+        .output-box {
+            background: white;
+            padding: 16px;
+            border-radius: 10px;
+            min-height: 80px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
 
+    <header>
+        <h1>केसरी ऑल इन वन पोर्टल</h1>
+        <p>स्टॉक, रेट्स, सामान्य ज्ञान और स्मार्ट वॉइस असिस्टेंट</p>
+    </header>
+
+    <!-- वॉइस और टेक्स्ट सर्च बार -->
+    <div class="voice-bar">
+        <input type="text" id="userQuery" placeholder="बोलें या लिखें (जैसे: आज का रेट या जीके सवाल)...">
+        <button class="btn-voice" id="micBtn" title="बोलकर पूछें">🎤</button>
+    </div>
+
+    <!-- मुख्य सेक्शन के लिंक -->
+    <div class="grid-menu">
+        <!-- अपने टैबलेट वाली HTML फाइल का सही नाम यहाँ href में डालें -->
+        <a href="tablet.html" class="card">
+            <h3>📱 टैबलेट व्यू</h3>
+            <p>मुख्य डैशबोर्ड और लाइव डेटा खोलें</p>
+        </a>
+
+        <a href="#gk-section" class="card" onclick="selectMode('gk')">
+            <h3>📚 जीके और पढ़ाई</h3>
+            <p>सवाल-जवाब, गणित और राशिफल</p>
+        </a>
+
+        <a href="#rates-section" class="card" onclick="selectMode('rates')">
+            <h3>🏪 स्टॉक और रेट्स</h3>
+            <p>दुकान, पेट्रोल पंप और गैस एजेंसी</p>
+        </a>
+    </div>
+
+    <!-- जवाब दिखाने और सुनने का बॉक्स -->
+    <div class="output-box" id="responseBox">
+        यहाँ आपका जवाब दिखाई देगा और स्पीकर पर सुनाई देगा...
+    </div>
+
+    <!-- आपकी मुख्य JavaScript फाइल से कनेक्शन -->
+    <script src="script.js"></script>
+
+    <!-- बेसिक वॉइस और नेविगेशन हैंडलर (अगर script.js में न हो तो काम करेगा) -->
+    <script>
+        function selectMode(mode) {
+            const box = document.getElementById('responseBox');
+            if (mode === 'gk') {
+                box.innerText = "जीके मोड सक्रिय है। कृपया माइक दबाकर अपना सवाल पूछें।";
+            } else if (mode === 'rates') {
+                box.innerText = "स्टॉक और रेट्स मोड सक्रिय है। आइटम का नाम बोलें या लिखें।";
+            }
+        }
+    </script>
+
+</body>
+</html>
