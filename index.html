@@ -1,1 +1,238 @@
+HTML
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GK Kesari AI - M Lal</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#071426;
+ color:white;
+}
+header{
+ background:#102d50;
+ padding:20px;
+ text-align:center;
+ border-bottom:2px solid #19c7e8;
+}
+header h1{color:#35dcff;margin:5px}
+header p{margin:5px;color:#ddd}
+.container{
+ max-width:750px;
+ margin:20px auto;
+ padding:15px;
+}
+.chat{
+ background:#10243d;
+ border:1px solid #285071;
+ border-radius:14px;
+ padding:15px;
+ min-height:300px;
+}
+.message{
+ padding:13px;
+ margin:10px 0;
+ border-radius:10px;
+ line-height:1.7;
+ white-space:pre-wrap;
+ overflow-wrap:anywhere;
+}
+.user{background:#174c71}
+.ai{background:#173b36}
+textarea{
+ width:100%;
+ min-height:85px;
+ padding:14px;
+ margin-top:15px;
+ border-radius:10px;
+ font-size:17px;
+}
+button{
+ border:0;
+ border-radius:9px;
+ padding:13px 17px;
+ margin:7px 3px;
+ font-size:16px;
+ font-weight:bold;
+ cursor:pointer;
+ background:#14c7e8;
+ color:#001421;
+}
+button:disabled{opacity:.5}
+.buttons{text-align:center}
+#status{color:#7eeaff;text-align:center}
+</style>
+</head>
+<body>
+
+<header>
+<h1>🤖 GK KESARI AI</h1>
+<p>Powered by Gemini | M Lal</p>
+<p>पूछिए कोई भी सवाल - पाइए AI का जवाब</p>
+</header>
+
+<div class="container">
+<div class="chat" id="chat">
+<div class="message ai">
+नमस्कार! मैं GK Kesari AI हूँ।
+भारत, दुनिया, विज्ञान, इतिहास, खेल या कोई भी सवाल पूछिए।
+</div>
+</div>
+
+<textarea id="question"
+placeholder="अपना कोई भी सवाल यहाँ लिखें..."></textarea>
+
+<div class="buttons">
+<button id="askBtn" onclick="askAI()">पूछें 🚀</button>
+<button onclick="startVoice()">🎤 बोलकर पूछें</button>
+<button onclick="readAnswer()">🔊 जवाब सुनें</button>
+<button onclick="clearChat()">साफ करें</button>
+</div>
+
+<p id="status"></p>
+</div>
+
+<script>
+const chat = document.getElementById("chat");
+const questionBox = document.getElementById("question");
+const statusBox = document.getElementById("status");
+const askBtn = document.getElementById("askBtn");
+
+let lastAnswer = "";
+let busy = false;
+
+async function askAI(){
+ const question = questionBox.value.trim();
+
+ if(!question || busy) return;
+
+ busy = true;
+ askBtn.disabled = true;
+ statusBox.textContent = "AI जवाब तैयार कर रहा है...";
+
+ const userMessage = document.createElement("div");
+ userMessage.className = "message user";
+ userMessage.textContent = "आप: " + question;
+ chat.appendChild(userMessage);
+
+ const answerBox = document.createElement("div");
+ answerBox.className = "message ai";
+ answerBox.textContent = "GK Kesari AI: ";
+ chat.appendChild(answerBox);
+
+ questionBox.value = "";
+
+ try{
+  const response = await fetch("/ask",{
+   method:"POST",
+   headers:{"Content-Type":"application/json"},
+   body:JSON.stringify({question})
+  });
+
+  if(!response.ok){
+   const err = await response.json();
+   throw new Error(err.error || "सर्वर में समस्या");
+  }
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+  lastAnswer = "";
+
+  while(true){
+   const result = await reader.read();
+   if(result.done) break;
+
+   buffer += decoder.decode(result.value,{stream:true});
+
+   const events = buffer.split("\n\n");
+   buffer = events.pop();
+
+   for(const event of events){
+    const line = event.split("\n").find(x=>x.startsWith("data:"));
+    if(!line) continue;
+
+    const raw = line.slice(5).trim();
+    if(raw === "[DONE]") continue;
+
+    try{
+     const item = JSON.parse(raw);
+     if(item.error) throw new Error(item.error);
+
+     if(item.text){
+      lastAnswer += item.text;
+      answerBox.textContent = "GK Kesari AI: " + lastAnswer;
+      chat.scrollTop = chat.scrollHeight;
+     }
+    }catch(e){
+     if(e.message && !e.message.includes("JSON")){
+      throw e;
+     }
+    }
+   }
+  }
+
+  if(!lastAnswer) answerBox.textContent = "जवाब नहीं मिला। दोबारा प्रयास करें।";
+  statusBox.textContent = "जवाब पूरा हुआ।";
+
+ }catch(error){
+  answerBox.textContent = "समस्या: " + error.message;
+  statusBox.textContent = "कृपया दोबारा कोशिश करें।";
+ }finally{
+  busy = false;
+  askBtn.disabled = false;
+ }
+}
+
+function readAnswer(){
+ if(!lastAnswer){
+  statusBox.textContent = "पहले कोई सवाल पूछिए।";
+  return;
+ }
+ speechSynthesis.cancel();
+ const speech = new SpeechSynthesisUtterance(lastAnswer);
+ speech.lang = "hi-IN";
+ speech.rate = 0.9;
+ speechSynthesis.speak(speech);
+}
+
+function startVoice(){
+ const Speech = window.SpeechRecognition ||
+                window.webkitSpeechRecognition;
+
+ if(!Speech){
+  alert("इस ब्राउज़र में Voice सुविधा उपलब्ध नहीं है।");
+  return;
+ }
+
+ const recognition = new Speech();
+ recognition.lang = "hi-IN";
+ recognition.onresult = e=>{
+  questionBox.value = e.results[0][0].transcript;
+  askAI();
+ };
+ recognition.start();
+}
+
+function clearChat(){
+ if(busy) return;
+ chat.innerHTML = "";
+ lastAnswer = "";
+ statusBox.textContent = "";
+}
+
+questionBox.addEventListener("keydown",e=>{
+ if(e.key==="Enter" && !e.shiftKey){
+  e.preventDefault();
+  askAI();
+ }
+});
+</script>
+</body>
+</html>
 
