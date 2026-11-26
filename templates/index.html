@@ -1,1 +1,369 @@
 
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GK KESARI AI</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #080d20;
+  color: white;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 28px 12px;
+}
+
+.dashboard {
+  width: 100%;
+  max-width: 370px;
+  min-height: 430px;
+  padding: 25px 18px;
+  text-align: center;
+  background: #172342;
+  border-radius: 20px;
+  box-shadow: 0 0 22px #123b78;
+}
+
+.robot {
+  font-size: 42px;
+  margin-bottom: 10px;
+}
+
+h2 {
+  color: #ffd447;
+  font-size: 21px;
+  margin: 8px 0;
+}
+
+.subtitle {
+  color: #9ba8c4;
+  font-size: 11px;
+  margin: 14px 0 25px;
+}
+
+.speaker {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 2px solid #ffd447;
+  background: #102044;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+  margin-bottom: 22px;
+}
+
+.question {
+  background: #263b64;
+  border-radius: 12px;
+  padding: 16px 10px;
+  font-size: 17px;
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+.options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.option {
+  padding: 13px 5px;
+  border-radius: 9px;
+  border: 1px solid #52658a;
+  background: #24385d;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.option:disabled {
+  opacity: 1;
+}
+
+.option.correct {
+  background: #176c43;
+  border-color: #4be99b;
+}
+
+.option.wrong {
+  background: #8d2834;
+  border-color: #ff7777;
+}
+
+#message {
+  color: #ffd447;
+  font-size: 14px;
+  min-height: 24px;
+  margin: 15px 0;
+}
+
+.next {
+  background: #ffbd22;
+  border: none;
+  color: #151515;
+  padding: 13px 27px;
+  border-radius: 9px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.next:active, .option:active {
+  transform: scale(.97);
+}
+
+.progress {
+  color: #aab7d0;
+  font-size: 12px;
+  margin-top: 17px;
+}
+
+.footer {
+  color: #8794b1;
+  font-size: 11px;
+  margin-top: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="dashboard">
+
+  <div class="robot">🤖</div>
+
+  <h2>GK KESARI AI</h2>
+
+  <div class="subtitle">
+    Smart Knowledge Dashboard
+  </div>
+
+  <button class="speaker" onclick="speakQuestion()">
+    🔊
+  </button>
+
+  <div class="question" id="question">
+    सवाल लोड हो रहा है...
+  </div>
+
+  <div class="options" id="options"></div>
+
+  <div id="message">
+    सही जवाब चुनिए
+  </div>
+
+  <button class="next" onclick="nextQuestion()">
+    Next question ➜
+  </button>
+
+  <div class="progress" id="progress">
+    सवाल 1
+  </div>
+
+  <div class="footer">
+    GK KESARI AI • LIVE DASHBOARD
+  </div>
+
+</div>
+
+<script>
+const questions = [
+{
+ q:"भारत की राजधानी क्या है?",
+ o:["मुंबई","नई दिल्ली","जयपुर","लखनऊ"],
+ a:1
+},
+{
+ q:"भारत का राष्ट्रीय पशु कौन है?",
+ o:["शेर","हाथी","बाघ","घोड़ा"],
+ a:2
+},
+{
+ q:"भारत का राष्ट्रीय पक्षी कौन है?",
+ o:["तोता","मोर","कबूतर","हंस"],
+ a:1
+},
+{
+ q:"भारत का राष्ट्रीय फूल कौन सा है?",
+ o:["गुलाब","कमल","चमेली","सूरजमुखी"],
+ a:1
+},
+{
+ q:"भारत का संविधान कब लागू हुआ?",
+ o:["1947","1948","1950","1952"],
+ a:2
+},
+{
+ q:"भारत के प्रथम प्रधानमंत्री कौन थे?",
+ o:["महात्मा गांधी","जवाहरलाल नेहरू","सरदार पटेल","राजेंद्र प्रसाद"],
+ a:1
+},
+{
+ q:"सूर्य किस दिशा से निकलता है?",
+ o:["पश्चिम","उत्तर","दक्षिण","पूर्व"],
+ a:3
+},
+{
+ q:"भारत की मुद्रा क्या है?",
+ o:["डॉलर","रुपया","यूरो","पाउंड"],
+ a:1
+},
+{
+ q:"पृथ्वी का उपग्रह कौन है?",
+ o:["सूर्य","मंगल","चंद्रमा","शुक्र"],
+ a:2
+},
+{
+ q:"ताजमहल कहाँ स्थित है?",
+ o:["दिल्ली","आगरा","जयपुर","भोपाल"],
+ a:1
+},
+{
+ q:"भारत का राष्ट्रीय गान किसने लिखा?",
+ o:["प्रेमचंद","रवींद्रनाथ टैगोर","कबीर","तुलसीदास"],
+ a:1
+},
+{
+ q:"एक सप्ताह में कितने दिन होते हैं?",
+ o:["5","6","7","8"],
+ a:2
+},
+{
+ q:"पानी का रासायनिक सूत्र क्या है?",
+ o:["CO2","H2O","O2","NaCl"],
+ a:1
+},
+{
+ q:"लाल किला कहाँ है?",
+ o:["मुंबई","दिल्ली","पटना","चेन्नई"],
+ a:1
+},
+{
+ q:"भारत का स्वतंत्रता दिवस कब मनाया जाता है?",
+ o:["26 जनवरी","15 अगस्त","2 अक्टूबर","14 नवंबर"],
+ a:1
+}
+];
+
+let remaining = [];
+let current = null;
+let questionNumber = 0;
+let answered = false;
+
+function shuffle(array) {
+  for(let i = array.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function loadQuestion() {
+  if(remaining.length === 0) {
+    remaining = shuffle(
+      Array.from({length: questions.length}, (_,i) => i)
+    );
+  }
+
+  current = questions[remaining.pop()];
+  questionNumber++;
+  answered = false;
+
+  document.getElementById("question").innerText = current.q;
+  document.getElementById("message").innerText = "सही जवाब चुनिए";
+
+  const box = document.getElementById("options");
+  box.innerHTML = "";
+
+  current.o.forEach((answer,index) => {
+    const button = document.createElement("button");
+    button.className = "option";
+    button.innerText = ["A. ","B. ","C. ","D. "][index] + answer;
+    button.onclick = () => checkAnswer(index,button);
+    box.appendChild(button);
+  });
+
+  document.getElementById("progress").innerText =
+    "सवाल " + questionNumber + " • GK KESARI AI";
+}
+
+function checkAnswer(index,button) {
+  if(answered) return;
+
+  answered = true;
+
+  const buttons = document.querySelectorAll(".option");
+
+  buttons.forEach(b => b.disabled = true);
+
+  if(index === current.a) {
+    button.classList.add("correct");
+    document.getElementById("message").innerText =
+      "बहुत बढ़िया! आपका जवाब सही है।";
+    speak("बहुत बढ़िया! आपका जवाब सही है।");
+  } else {
+    button.classList.add("wrong");
+    buttons[current.a].classList.add("correct");
+
+    document.getElementById("message").innerText =
+      "गलत जवाब। सही उत्तर है " + current.o[current.a];
+
+    speak("गलत जवाब। सही उत्तर है " + current.o[current.a]);
+  }
+}
+
+function nextQuestion() {
+  if(!answered) {
+    document.getElementById("message").innerText =
+      "पहले सही जवाब चुनिए।";
+    return;
+  }
+
+  loadQuestion();
+}
+
+function speak(text) {
+  if(!("speechSynthesis" in window)) {
+    document.getElementById("message").innerText =
+      "इस ब्राउज़र में आवाज उपलब्ध नहीं है।";
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+
+  const speech = new SpeechSynthesisUtterance(text);
+  speech.lang = "hi-IN";
+  speech.rate = 0.85;
+  speech.pitch = 1;
+
+  window.speechSynthesis.speak(speech);
+}
+
+function speakQuestion() {
+  if(current) {
+    speak(current.q + "। " +
+      current.o.map((v,i) =>
+        ["विकल्प A, ","विकल्प B, ","विकल्प C, ","विकल्प D, "][i] + v
+      ).join("। "));
+  }
+}
+
+loadQuestion();
+</script>
+
+</body>
+</html>
+
